@@ -1,5 +1,5 @@
 import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { AnimationController, Animation, Platform, Gesture, GestureController } from '@ionic/angular';
+import { AnimationController, Animation, Platform, Gesture, GestureController, GestureDetail } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +40,7 @@ export class HomePage {
   private maxTranslate:number;
   private animation: Animation;
   private gesture: Gesture;
-  private swipe: boolean = false;
+  private swiping: boolean = false;
   
 
   constructor(
@@ -62,26 +62,68 @@ export class HomePage {
     .addElement(this.blocks.nativeElement)
     .duration(300)
     .fromTo('transform', 'translateY(0)', `translateY(${this.maxTranslate}px)`)
+    .onFinish( () => this.gesture.enable(true))
   }
 
   detectSwipe(){
-    // this.gesture = this.gestureCtrl.create({
-    //   el: this.swipeDown.el
-    // })
-    console.log(this.swipeDown)
-  }
+    this.gesture = this.gestureCtrl.create({
+      el: this.swipeDown.el,
+      gestureName: 'swipe-down',
+      threshold: 0,
+      onMove: evt => this.onMove(evt),
+      onEnd: evt => this.onEnd(evt)
+    }, true)
 
+    this.gesture.enable(true);
+  }
+  
   toogleBlocks(){
     this.initialStep = this.initialStep === 0 ? this.maxTranslate : 0;
+    this.gesture.enable(false);
     this.animation.direction(this.initialStep === 0 ? 'reverse' : 'normal').play();
     this.setBackgroundOpacity();
   }
   
-  setBackgroundOpacity() {
-    this.renderer.setStyle(this.background.nativeElement, 'opacity', this.initialStep === 0 ? '0' : '1');
+  setBackgroundOpacity(value: number = null) {
+    this.renderer.setStyle(this.background.nativeElement, 'opacity', value ? value : this.initialStep === 0 ? '0' : '1');
   }
 
   fixedBlocks(): boolean{
-    return this.initialStep === this.maxTranslate;
+    return this.swiping || this.initialStep === this.maxTranslate;
   }
+
+  onMove(evt: GestureDetail){
+    if(!this.swiping){
+      this.animation.direction('normal').progressStart(true);
+      this.swiping = true;
+    }
+
+    const step: number = this.getStep(evt)
+    this.animation.progressStep(step);
+    this.setBackgroundOpacity(step);
+  }
+
+  getStep(evt: GestureDetail): number {
+    const delta: number = this.initialStep + evt.deltaY;
+    return delta/this.maxTranslate
+  }
+
+  onEnd(evt: GestureDetail){
+    if(!this.swiping)
+      return;
+    
+    this.gesture.enable(false)
+      
+    const step: number = this.getStep(evt)
+    const shouldComplete: boolean = step > 0.5;
+
+    this.animation.progressEnd(shouldComplete ? 1 : 0, step)
+
+    this.initialStep = shouldComplete ? this.maxTranslate : 0;
+
+    this.setBackgroundOpacity();
+
+    this.swiping = false;
+  }
+
 }

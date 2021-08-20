@@ -10,7 +10,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" color="primary">
+<ion-content class="ion-padding" color="primary" [scrollY]="!swiping">
   <div #background class="background opacity-transition">
     <div class="bankInformation ion-text-center">
       <img class="qrcode" src="assets/qrcode.png">
@@ -102,7 +102,7 @@
   </div>
 </ion-content>
 
-<ion-footer [ngClass]="{hidden: initialStep > 0}" class="ion-no-border">
+<ion-footer [ngClass]="fixedBlocks() ? 'hidden' : null" class="ion-no-border">
   <ion-toolbar class="ion-no-margin ion-padding-vertical" color="primary">
     <ion-slides class="opacity-transition" [options]="slidesOptions">
       <ion-slide *ngFor="let option of options">
