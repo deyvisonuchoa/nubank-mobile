@@ -3,15 +3,15 @@
     <ion-title class="ion-text-cecnter">
       <img src="assets/logo4.png" alt="">
       <span>deyvison</span>
-      <ion-button color="light" fill="clear" size="small">
-        <ion-icon slot="icon-only" name="arrow-down-outline"></ion-icon>
+      <ion-button (click)="toogleBlocks()" color="light" fill="clear" size="small">
+        <ion-icon slot="icon-only" [name]="initialStep > 0 ? 'arrow-up-outline' : 'arrow-down-outline'"></ion-icon>
       </ion-button>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding" color="primary">
-  <div class="background">
+  <div #background class="background opacity-transition">
     <div class="bankInformation ion-text-center">
       <img class="qrcode" src="assets/qrcode.png">
 
@@ -32,9 +32,9 @@
     </ion-button>
   </div>
 
-  <div class="blocks">
+  <div #blocks class="blocks" [ngClass]="{fixed: fixedBlocks()}">
     <ion-card>
-      <ion-item class="ion-margin-vertical" lines="none">
+      <ion-item #swipeDown class="ion-margin-vertical" lines="none">
         <ion-icon slot="start" name="card-outline"></ion-icon>
         <ion-label>Cartão de crédito</ion-label>
       </ion-item>
@@ -102,9 +102,9 @@
   </div>
 </ion-content>
 
-<ion-footer class="ion-no-border">
-  <ion-toolbar color="primary">
-    <ion-slides [options]="slidesOptions">
+<ion-footer [ngClass]="{hidden: initialStep > 0}" class="ion-no-border">
+  <ion-toolbar class="ion-no-margin ion-padding-vertical" color="primary">
+    <ion-slides class="opacity-transition" [options]="slidesOptions">
       <ion-slide *ngFor="let option of options">
         <div class="container ion-text-left">
           <ion-icon [name]="option.icon"></ion-icon>
