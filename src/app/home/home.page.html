@@ -10,15 +10,107 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content color="primary">
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<ion-content class="ion-padding" color="primary">
+  <div class="background">
+    <div class="bankInformation ion-text-center">
+      <img class="qrcode" src="assets/qrcode.png">
+
+      <span>Banco <strong>000 - Nu Pagamentos S.A</strong></span>
+      <span>Agência <Strong>0000</Strong></span>
+      <span>Conta <Strong>00000000-0</Strong></span>
+    </div>
+
+    <ion-list lines="full">
+      <ion-item *ngFor="let item of items" detail>
+        <ion-icon slot="start" [name]="item.icon"></ion-icon>
+        <ion-label>{{item.text}}</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-button class="logout" color="light" expand="block" fill="outline">
+      Sair da conta
+    </ion-button>
+  </div>
+
+  <div class="blocks">
+    <ion-card>
+      <ion-item class="ion-margin-vertical" lines="none">
+        <ion-icon slot="start" name="card-outline"></ion-icon>
+        <ion-label>Cartão de crédito</ion-label>
+      </ion-item>
+
+      <ion-card-content class="ion-no-padding">
+        <div class="ion-padding ion-margin-vertical cash">
+          <span class="blue">Fatura atual</span>
+          <span class="blue value">R$ 57,55</span>
+          <span>Limite disponível <span class="green">R$ 2942,45</span></span>
+        </div>
+
+        <div class="ion-padding-vertical footer">
+          <ion-item lines="none" color="light" detail>
+            <ion-icon slot="start" name="pizza-outline"></ion-icon>
+            <ion-label class="ion-text-wrap">Compra mais recente em Ifood  *Ifood no valor de R$ 54,00</ion-label>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-item class="ion-margin-vertical" lines="none">
+        <ion-icon slot="start" name="card-outline"></ion-icon>
+        <ion-label>Conta</ion-label>
+        <ion-button color="dark" fill="clear" slot="end">
+          <ion-icon slot="icon-only" name="eye-off-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <ion-card-content class="ion-no-padding">
+        <div class="ion-padding ion-margin-vertical cash">
+          <span>Saldo disponível</span>
+          <ion-text color="dark">
+            <span class="value">R$ 57,55</span>
+          </ion-text>
+        </div>
+
+        <div class="ion-padding-vertical footer">
+          <ion-item lines="none" color="light" detail>
+            <ion-icon slot="start" name="barcode-outline"></ion-icon>
+            <ion-label class="ion-text-wrap">Boleto de R$ 322,55 pago na segunda</ion-label>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-content class="ion-text-center">
+        <ion-icon class="gift" name="gift-outline"></ion-icon>
+
+        <div class="ion-margin-vertical">
+          <ion-text color="dark">
+            <p class="title">
+              <strong>Nubank Rewards</strong>
+            </p>
+            <p>Acumule pontos que nunca expiram e troque por passagens aéreas ou serviços que você realmente usa</p>
+          </ion-text>
+        </div>
+
+        <ion-button expand="block" fill="outline">
+          <strong>ATIVE O SEU REWARDS</strong>
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>
 
 <ion-footer class="ion-no-border">
   <ion-toolbar color="primary">
-    <ion-title>Footer</ion-title>
+    <ion-slides [options]="slidesOptions">
+      <ion-slide *ngFor="let option of options">
+        <div class="container ion-text-left">
+          <ion-icon [name]="option.icon"></ion-icon>
+          <span>{{ option.text }}</span>
+        </div>
+      </ion-slide>
+    </ion-slides>
   </ion-toolbar>
 </ion-footer>
